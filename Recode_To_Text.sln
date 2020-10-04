@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1231
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recode_To_Text", "Recode_To_Text\Recode_To_Text.csproj", "{73C08788-C041-45E7-9B66-98E9DDF71AFC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{73C08788-C041-45E7-9B66-98E9DDF71AFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73C08788-C041-45E7-9B66-98E9DDF71AFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73C08788-C041-45E7-9B66-98E9DDF71AFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73C08788-C041-45E7-9B66-98E9DDF71AFC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {43820EDD-9A9C-43DE-82A0-52AFAC31AA9F}
+	EndGlobalSection
+EndGlobal
