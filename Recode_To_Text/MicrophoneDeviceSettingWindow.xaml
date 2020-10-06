@@ -1,0 +1,17 @@
+﻿<UserControl x:Class="Recode_to_text.MicrophoneDeviceSetingWindow"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Recode_to_text"
+             mc:Ignorable="d" 
+             Width="218" Height="120"
+             Background="White" Loaded="UserControl_Loaded">
+    <Grid>
+        <Label x:Name="label_MicrophoneDevice" Content="マイクデバイス" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="comboBox_Device" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="button_OK" Content="OK" HorizontalAlignment="Left" Margin="39,87,0,0" VerticalAlignment="Top" Width="75" Click="Button_OK_Click"/>
+        <Button x:Name="button_Cancel" Content="キャンセル" HorizontalAlignment="Left" Margin="133,87,0,0" VerticalAlignment="Top" Width="75" Command="ApplicationCommands.Close"/>
+
+    </Grid>
+</UserControl>

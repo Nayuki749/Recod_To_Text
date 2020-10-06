@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:Recode_To_Text"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary Source="pack://application:,,,/Lighty;component/Styles.xaml" />
     </Application.Resources>
 </Application>
