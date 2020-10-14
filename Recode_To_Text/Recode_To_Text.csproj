@@ -75,8 +75,9 @@
     <Reference Include="NAudio, Version=1.10.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NAudio.1.10.0\lib\net35\NAudio.dll</HintPath>
     </Reference>
-    <Reference Include="Speech_To_Text">
-      <HintPath>..\Speech_To_Text\bin\x64\Debug\Speech_To_Text.dll</HintPath>
+    <Reference Include="Speech_To_Text, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Speech_To_Text\bin\x64\Release\Speech_To_Text.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

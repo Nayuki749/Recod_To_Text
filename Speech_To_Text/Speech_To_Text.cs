@@ -324,7 +324,7 @@ namespace Nayuki749.Speech_to_Text
         private void RecognizedEventHandler(SpeechRecognitionEventArgs e, RecoType rt)
         {
             SpeechRecognizedEventArgs eventArgs = new SpeechRecognizedEventArgs();
-
+#if DEBUG
             if (rt == RecoType.Base)
             {
                 eventArgs.Message = e.Result.Text;
@@ -338,7 +338,7 @@ namespace Nayuki749.Speech_to_Text
 
             eventArgs.Message = $" --- Final result received. Reason: {e.Result.Reason.ToString()}. --- ";
             OnSpeechRecognizedEvent(eventArgs);
-
+#endif
             if (!string.IsNullOrEmpty(e.Result.Text))
             {
                 //this.WriteLine(log, e.Result.Text);
@@ -395,6 +395,10 @@ namespace Nayuki749.Speech_to_Text
 
         #endregion
 
+#if DEBUG
+        /// <summary>
+        /// Console Application Debug
+        /// </summary>
         static void Main()
         {
             Speech_To_Text p = new Speech_To_Text();
@@ -413,6 +417,7 @@ namespace Nayuki749.Speech_to_Text
             p.Start(@"C:\Users\dizzy\Desktop\M1_f01.wav");
             Console.ReadLine();
         }
+#endif
 
         public Speech_To_Text()
         {
@@ -446,7 +451,7 @@ namespace Nayuki749.Speech_to_Text
             return true;
         }
 
-        #region 音声認識開始
+#region 音声認識開始
         /// <summary>
         /// Checks if keys are valid
         /// Plays audio if input source is a valid audio file
@@ -541,7 +546,7 @@ namespace Nayuki749.Speech_to_Text
                 Task.Run(async () => { await CreateBaseReco().ConfigureAwait(false); });
             }
         }
-        #endregion 
+#endregion
 
         /// <summary>
         /// Stops Recognition and enables Settings Panel in UI
@@ -574,8 +579,8 @@ namespace Nayuki749.Speech_to_Text
             var config = SpeechConfig.FromSubscription(this.SubscriptionKey, this.Region);
             config.SpeechRecognitionLanguage = this.RecognitionLanguage;
             //If proxy information has been entered, set the proxy
-            if ((this.proxy_Host != null || this.proxy_Host.Length >= 0) &&
-                (this.proxy_Port != null || this.proxy_Port.Length >= 0))
+            if ((this.proxy_Host != null && this.proxy_Host.Length > 0) &&
+                (this.proxy_Port != null && this.proxy_Port.Length > 0))
                 config.SetProxy(proxy_Host, int.Parse(proxy_Port));
 
             SpeechRecognizer basicRecognizer;

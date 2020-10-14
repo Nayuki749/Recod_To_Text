@@ -70,7 +70,7 @@
                                 <!--<RowDefinition Height="Auto" />-->
                             </Grid.RowDefinitions>
 
-                            <TextBlock x:Name="StopButtonTitle" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StopButtonTitle, FallbackValue='Recoding Stop'}" Grid.Column="1" VerticalAlignment="Center"  FontFamily="Calibri" FontWeight="Bold" FontSize="28" Foreground="White" Margin="20,0,0,0" RenderTransformOrigin="0.515,-0.088" />
+                            <TextBlock x:Name="StopButtonTitle" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ProcessStartButtonTitle, FallbackValue='Process Start'}" Grid.Column="1" VerticalAlignment="Center"  FontFamily="Calibri" FontWeight="Bold" FontSize="28" Foreground="White" Margin="20,0,0,0" RenderTransformOrigin="0.515,-0.088" />
                             <!--<TextBlock x:Name="SubTitle" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SubTitle, FallbackValue='Duration: 50 min'}" Grid.Column="1" Grid.Row="1" VerticalAlignment="top" FontFamily="Calibri" FontSize="14" Foreground="White" Margin="20,0,0,0" />-->
                         </Grid>
                     </Grid>

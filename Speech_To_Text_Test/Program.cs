@@ -262,14 +262,14 @@ namespace Speech_To_Text_Test
             p.UseBaseModel = true;
             p.UseCustomModel = false;
             p.UseBaseAndCustomModels = false;
-            p.subscriptionKey = "1888a130b46a4e3888daed19537c3196";
+            p.subscriptionKey = "your subscription key";
             p.Region = "japaneast";
             p.RecognitionLanguage = "ja-JP";
             p.customModeEndpointId = "none";
             p.MicrophoneID = "";
             p.PROXY_HOST = "";
             p.PROXY_Port = "";
-            p.Start(@"C:\Users\dizzy\Desktop\M1_f01.wav");
+            p.Start(@"wev file path");
             Console.ReadLine();
         }
 

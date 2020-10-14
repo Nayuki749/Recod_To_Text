@@ -168,6 +168,10 @@ namespace Recode_to_text
             stt.UseBaseModel = true;
             stt.UseBaseAndCustomModels = false;
             stt.UseCustomModel = false;
+            stt.IsrecognizingCheck = false;
+#if DEBUG
+            stt.IsrecognizingCheck = true;
+#endif
             #endregion
 
             try
@@ -235,6 +239,7 @@ namespace Recode_to_text
         private void Button_ProcessStart_Click(object sender, RoutedEventArgs e)
         {
 
+            #region 音声認識機能プロパティ設定
             stt.SubscriptionKey = setting.SubscriptionKey;
             stt.Region = setting.Region;
             stt.RecognitionLanguage = setting.Location;
@@ -246,11 +251,23 @@ namespace Recode_to_text
             stt.UseBaseModel = true;
             stt.UseBaseAndCustomModels = false;
             stt.UseCustomModel = false;
+            stt.IsrecognizingCheck = false;
+
+#if DEBUG
+            stt.IsrecognizingCheck = true;
+#endif
+            #endregion
 
             stt.Start(filepath);
         }
 
-        #region 音声認識イベント
+#region 音声認識イベント
+
+        /// <summary>
+        /// ストップイベント
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private  void SpeechSessionStoped(object sender, SpeechSessionStopedEventArgs e)
         {
             using (var write = new StreamWriter(filepath + ".txt", true))
@@ -258,7 +275,11 @@ namespace Recode_to_text
                write.WriteLine(e.Message);
             }
         }
-
+        /// <summary>
+        /// スタートイベント
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SpeechSessionStarted(object sender, SpeechSessionStartedEventArgs e)
         {
             using (var write = new StreamWriter(filepath + ".txt", true))
@@ -267,6 +288,11 @@ namespace Recode_to_text
             }
         }
 
+        /// <summary>
+        /// キャンセルイベント
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SpechCanceled(object sender, SpeechCanceledEventArgs e)
         {
             using (var write = new StreamWriter(filepath + ".txt", true))
@@ -275,6 +301,11 @@ namespace Recode_to_text
             }
         }
 
+        /// <summary>
+        /// 音声認識完了イベント
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
             using (var write = new StreamWriter(filepath + ".txt", true))
@@ -283,6 +314,11 @@ namespace Recode_to_text
             }
         }
 
+        /// <summary>
+        /// 音声認識中間イベント
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SpeechRecognizing(object sender, SpeechRecognizingEventArgs e)
         {
             using (var write = new StreamWriter(filepath + ".txt", true))
@@ -291,6 +327,11 @@ namespace Recode_to_text
             }
         }
 
+        /// <summary>
+        /// 音声認識スタートイベント
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RecognitionStart(object sender, RecognitionStartEventArgs e)
         {
             using (var write = new StreamWriter(filepath + ".txt", true))
@@ -299,6 +340,11 @@ namespace Recode_to_text
             }
         }
 
+        /// <summary>
+        /// 音声認識検出イベント
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SpeechDetected(object sender, SpeechDetectedEvendEventArgs e)
         {
             using (var write = new StreamWriter(filepath + ".txt", true))
@@ -306,6 +352,7 @@ namespace Recode_to_text
                 write.WriteLine(e.Message);
             }
         }
-        #endregion
+#endregion
+
     }
 }
