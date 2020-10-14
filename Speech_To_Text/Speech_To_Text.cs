@@ -7,11 +7,13 @@ using System.Media;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.CognitiveServices.Speech;
-using Microsoft.CognitiveServices.Speech.Audio;
+
 
 namespace Nayuki749.Speech_to_Text
 {
+    using Microsoft.CognitiveServices.Speech;
+    using Microsoft.CognitiveServices.Speech.Audio;
+
     public class Speech_To_Text
     {
         #region プロパティ
@@ -547,29 +549,43 @@ namespace Nayuki749.Speech_to_Text
         /// </summary>
         private async Task CreateBaseReco()
         {
-            // Todo: suport users to specifiy a different region.
-            var config = SpeechConfig.FromSubscription(this.SubscriptionKey, this.Region);
-            config.SpeechRecognitionLanguage = this.RecognitionLanguage;
-            //If proxy information has been entered, set the proxy
-            if ((this.proxy_Host != null || this.proxy_Host.Length >= 0) &&
-                (this.proxy_Port != null || this.proxy_Port.Length >= 0))
-                config.SetProxy(proxy_Host, int.Parse(proxy_Port));
-
-            SpeechRecognizer basicRecognizer;
-            if (this.UseMicrophone)
+            try
             {
-                if (MicrophoneID == "Default")
+                // Todo: suport users to specifiy a different region.
+                //var config = SpeechConfig.FromSubscription(this.SubscriptionKey, this.Region);
+                var config = SpeechConfig.FromSubscription("1888a130b46a4e3888daed19537c3196", "japaneast");
+                config.SpeechRecognitionLanguage = this.RecognitionLanguage;
+                //If proxy information has been entered, set the proxy
+                if ((this.proxy_Host != null || this.proxy_Host.Length >= 0) &&
+                    (this.proxy_Port != null || this.proxy_Port.Length >= 0))
+                    config.SetProxy(proxy_Host, int.Parse(proxy_Port));
+
+                SpeechRecognizer basicRecognizer;
+                if (this.UseMicrophone)
                 {
-                    using (basicRecognizer = new SpeechRecognizer(config))
+                    if (MicrophoneID == "Default")
                     {
-                        await this.RunRecognizer(basicRecognizer, RecoType.Base, stopBaseRecognitionTaskCompletionSource).ConfigureAwait(false);
+                        using (basicRecognizer = new SpeechRecognizer(config))
+                        {
+                            await this.RunRecognizer(basicRecognizer, RecoType.Base, stopBaseRecognitionTaskCompletionSource).ConfigureAwait(false);
+                        }
+                    }
+                    else
+                    {
+                        using (var audioInput = AudioConfig.FromMicrophoneInput(MicrophoneID))
+                        {
+                            //fromMicrophoneInput(string)
+                            using (basicRecognizer = new SpeechRecognizer(config, audioInput))
+                            {
+                                await this.RunRecognizer(basicRecognizer, RecoType.Base, stopBaseRecognitionTaskCompletionSource).ConfigureAwait(false);
+                            }
+                        }
                     }
                 }
                 else
                 {
-                    using (var audioInput = AudioConfig.FromMicrophoneInput(MicrophoneID))
+                    using (var audioInput = AudioConfig.FromWavFileInput(wavFileName))
                     {
-                        //fromMicrophoneInput(string)
                         using (basicRecognizer = new SpeechRecognizer(config, audioInput))
                         {
                             await this.RunRecognizer(basicRecognizer, RecoType.Base, stopBaseRecognitionTaskCompletionSource).ConfigureAwait(false);
@@ -577,16 +593,8 @@ namespace Nayuki749.Speech_to_Text
                     }
                 }
             }
-            else
-            {
-                using (var audioInput = AudioConfig.FromWavFileInput(wavFileName))
-                {
-                    using (basicRecognizer = new SpeechRecognizer(config, audioInput))
-                    {
-                        await this.RunRecognizer(basicRecognizer, RecoType.Base, stopBaseRecognitionTaskCompletionSource).ConfigureAwait(false);
-                    }
-                }
-            }
+            catch(Exception e) { throw new Exception(e.Message, e); }
+
         }
 
         /// <summary>
