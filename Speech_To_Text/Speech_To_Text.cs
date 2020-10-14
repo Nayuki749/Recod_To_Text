@@ -552,12 +552,11 @@ namespace Nayuki749.Speech_to_Text
             try
             {
                 // Todo: suport users to specifiy a different region.
-                //var config = SpeechConfig.FromSubscription(this.SubscriptionKey, this.Region);
-                var config = SpeechConfig.FromSubscription("1888a130b46a4e3888daed19537c3196", "japaneast");
+                var config = SpeechConfig.FromSubscription(this.SubscriptionKey, this.Region);
                 config.SpeechRecognitionLanguage = this.RecognitionLanguage;
                 //If proxy information has been entered, set the proxy
-                if ((this.proxy_Host != null || this.proxy_Host.Length >= 0) &&
-                    (this.proxy_Port != null || this.proxy_Port.Length >= 0))
+                if ((this.proxy_Host != null && this.proxy_Host.Length > 0) &&
+                    (this.proxy_Port != null && this.proxy_Port.Length > 0))
                     config.SetProxy(proxy_Host, int.Parse(proxy_Port));
 
                 SpeechRecognizer basicRecognizer;
@@ -610,8 +609,8 @@ namespace Nayuki749.Speech_to_Text
             config.SpeechRecognitionLanguage = this.RecognitionLanguage;
             config.EndpointId = this.CustomModelEndpointId;
             //If proxy information has been entered, set the proxy
-            if ((this.proxy_Host != null || this.proxy_Host.Length >= 0) &&
-                (this.proxy_Port != null || this.proxy_Port.Length >= 0))
+            if ((this.proxy_Host != null && this.proxy_Host.Length > 0) &&
+                (this.proxy_Port != null && this.proxy_Port.Length > 0))
                 config.SetProxy(proxy_Host, int.Parse(proxy_Port));
 
             SpeechRecognizer customRecognizer;
