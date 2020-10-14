@@ -240,7 +240,6 @@ namespace Recode_to_text
             stt.RecognitionLanguage = setting.Location;
             stt.PROXY_HOST = setting.PROXY_Host;
             stt.PROXY_Port = setting.PROXY_Port;
-            stt.MicrophoneID = setting.Device.Split(':').Last<string>();
             stt.CustomModelEndpointId = "none";
             stt.UseMicrophone = false;
             stt.UseFileInput = true;

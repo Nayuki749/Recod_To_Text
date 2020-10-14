@@ -7,13 +7,13 @@ using System.Media;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using System.Runtime.InteropServices;
+
 using Microsoft.CognitiveServices.Speech;
 using Microsoft.CognitiveServices.Speech.Audio;
 
-namespace Nayuki749.Speech_to_Text
+namespace Speech_To_Text_Test
 {
-    public class Speech_To_Text
+    class Program
     {
         #region プロパティ
         /// <summary>
@@ -134,7 +134,7 @@ namespace Nayuki749.Speech_to_Text
                 this.proxy_Port = value;
             }
         }
- 
+
 
         // Private properties
         private const string defaultLocale = "ja-JP";
@@ -144,14 +144,12 @@ namespace Nayuki749.Speech_to_Text
         private string proxy_Host = "";
         private string proxy_Port = "";
         private string wavFileName = "";
-       #endregion
-       
+        #endregion
         // The TaskCompletionSource must be rooted.
         // See https://blogs.msdn.microsoft.com/pfxteam/2011/10/02/keeping-async-methods-alive/ for details.
         private TaskCompletionSource<int> stopBaseRecognitionTaskCompletionSource;
         private TaskCompletionSource<int> stopCustomRecognitionTaskCompletionSource;
 
-       
         #region レコードタイプ
         /// <summary>
         /// For this app there are two recognizers, one with the baseline model (Base), one with CRIS model (Custom)
@@ -162,142 +160,7 @@ namespace Nayuki749.Speech_to_Text
             Custom = 2
         }
         #endregion
-
-        #region イベント
-        /// <summary>
-        /// 認識スタートイベントハンドラ
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public delegate void RecognitionStartEventHandler(object sender, RecognitionStartEventArgs e);
-        /// <summary>
-        /// 音声認識中間イベントハンドラ
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public delegate void SpeechRecognizingEventHandler(object sender, SpeechRecognizingEventArgs e);
-        /// <summary>
-        /// 音声認識完了イベントハンドラ
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public delegate void SpeechRecognizedEventHandler(object sender, SpeechRecognizedEventArgs e);
-        /// <summary>
-        /// キャンセルイベントハンドラ
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public delegate void SpeechCanceledEventHandler(object sender, SpeechCanceledEventArgs e);
-        /// <summary>
-        /// スタートイベントハンドラ
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public delegate void SpeechSessionStartedEventHandler(object sender, SpeechSessionStartedEventArgs e);
-        /// <summary>
-        /// ストップイベントハンドラ
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public delegate void SpeechSessionStopedEventHandler(object sender, SpeechSessionStopedEventArgs e);
-        /// <summary>
-        /// 音声認識検出イベントハンドラ
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public delegate void SpeechDetectedEventHandler(object sender, SpeechDetectedEvendEventArgs e);
-
-        /// <summary>
-        /// 認識スタートイベント
-        /// </summary>
-        public event RecognitionStartEventHandler RecognitionStartEvent;
-        /// <summary>
-        /// 音声認識中間イベント(Debug)
-        /// </summary>
-        public event SpeechRecognizingEventHandler SpeechRecognizingEvent;
-        /// <summary>
-        /// 音声認識完了イベント
-        /// </summary>
-        public event SpeechRecognizedEventHandler SpeechRecognizedEvent;
-        /// <summary>
-        /// キャンセルイベント
-        /// </summary>
-        public event SpeechCanceledEventHandler SpeechCanceledEvent;
-        /// <summary>
-        /// スタートイベント
-        /// </summary>
-        public event SpeechSessionStartedEventHandler SpeechSessionStartedEvent;
-        /// <summary>
-        /// ストップイベント
-        /// </summary>
-        public event SpeechSessionStopedEventHandler SpeechSessionStopedEvent;
-        /// <summary>
-        /// 音声認識検出イベント
-        /// </summary>
-        public event SpeechDetectedEventHandler SpeechDetectedEvent;
-
-        /// <summary>
-        /// 認識スタートイベントを発生
-        /// </summary>
-        /// <param name="e"></param>
-        protected virtual void OnRecognitionStartEvent(RecognitionStartEventArgs e)
-        {
-            RecognitionStartEvent?.Invoke(this, e);
-        }
-        /// <summary>
-        /// 音声認識中艦イベントを発生
-        /// </summary>
-        /// <param name="e"></param>
-        protected virtual void OnSpeechRecognizingEvent(SpeechRecognizingEventArgs e)
-        {
-            SpeechRecognizingEvent?.Invoke(this, e);
-        }
-
-        /// <summary>
-        /// 音声認識完了イベントを発生
-        /// </summary>
-        /// <param name="e"></param>
-        protected virtual void OnSpeechRecognizedEvent(SpeechRecognizedEventArgs e)
-        {
-            SpeechRecognizedEvent?.Invoke(this, e);
-        }
-
-        /// <summary>
-        /// キャンセルイベントを発生
-        /// </summary>
-        /// <param name="e"></param>
-        protected virtual void OnSpeechCanceledEvent(SpeechCanceledEventArgs e)
-        {
-            SpeechCanceledEvent?.Invoke(this, e);
-        }
-
-        /// <summary>
-        /// スタートイベント発生
-        /// </summary>
-        /// <param name="e"></param>
-        protected virtual void OnSpeechSessionStartedEvent(SpeechSessionStartedEventArgs e)
-        {
-            SpeechSessionStartedEvent?.Invoke(this, e);
-        }
-
-        /// <summary>
-        /// ストップイベント発生
-        /// </summary>
-        /// <param name="e"></param>
-        protected virtual void OnSpeechSessionStopedEvent(SpeechSessionStopedEventArgs e)
-        {
-            SpeechSessionStopedEvent?.Invoke(this, e);
-        }
-
-        /// <summary>
-        /// 音声認識検出イベント発生
-        /// </summary>
-        /// <param name="e"></param>
-        protected virtual void OnSpeechDetectedEvent(SpeechDetectedEvendEventArgs e)
-        {
-            SpeechDetectedEvent?.Invoke(this, e);
-        }
-        #endregion
+ 
 
         #region Recognition Event Handlers
         /// <summary>
@@ -310,11 +173,11 @@ namespace Nayuki749.Speech_to_Text
         /// </summary>
         private void RecognizingEventHandler(SpeechRecognitionEventArgs e, RecoType rt)
         {
-            SpeechRecognizingEventArgs eventArgs = new SpeechRecognizingEventArgs();
-            eventArgs.Message = "Intermediate result:  " + e.Result.Text;
-            eventArgs.Offset = e.Offset;
-            eventArgs.SessionId = e.SessionId;
-            OnSpeechRecognizingEvent(eventArgs);
+            //SpeechRecognizingEventArgs eventArgs = new SpeechRecognizingEventArgs();
+            Console.WriteLine("Intermediate result:  " + e.Result.Text);
+            //eventArgs.Offset = e.Offset;
+            //eventArgs.SessionId = e.SessionId;
+            //OnSpeechRecognizingEvent(eventArgs);
         }
 
         /// <summary>
@@ -322,27 +185,24 @@ namespace Nayuki749.Speech_to_Text
         /// </summary>
         private void RecognizedEventHandler(SpeechRecognitionEventArgs e, RecoType rt)
         {
-            SpeechRecognizedEventArgs eventArgs = new SpeechRecognizedEventArgs();
 
             if (rt == RecoType.Base)
             {
-                eventArgs.Message = e.Result.Text;
-                OnSpeechRecognizedEvent(eventArgs);
+                Console.WriteLine(e.Result.Text);
             }
             else
             {
-                eventArgs.Message = e.Result.Text;
-                OnSpeechRecognizedEvent(eventArgs);
+                Console.WriteLine(e.Result.Text);
             }
 
-            eventArgs.Message = $" --- Final result received. Reason: {e.Result.Reason.ToString()}. --- ";
-            OnSpeechRecognizedEvent(eventArgs);
+            Console.WriteLine($" --- Final result received. Reason: {e.Result.Reason.ToString()}. --- ");
+            
 
             if (!string.IsNullOrEmpty(e.Result.Text))
             {
                 //this.WriteLine(log, e.Result.Text);
-                eventArgs.Message = e.Result.Text;
-                OnSpeechRecognizedEvent(eventArgs);
+                Console.WriteLine(e.Result.Text);
+                
 
             }
 
@@ -357,11 +217,11 @@ namespace Nayuki749.Speech_to_Text
         /// </summary>
         private void CanceledEventHandler(SpeechRecognitionCanceledEventArgs e, RecoType rt, TaskCompletionSource<int> source)
         {
-            SpeechCanceledEventArgs eventArgs = new SpeechCanceledEventArgs();
-            eventArgs.Message = "--- recognition canceled ---";
-            OnSpeechCanceledEvent(eventArgs);
-            eventArgs.Message = $"CancellationReason: {e.Reason.ToString()}. ErrorDetails: {e.ErrorDetails}.";
-            OnSpeechCanceledEvent(eventArgs);
+            
+            Console.WriteLine("--- recognition canceled ---");
+         
+            Console.WriteLine($"CancellationReason: {e.Reason.ToString()}. ErrorDetails: {e.ErrorDetails}.");
+            
         }
 
         /// <summary>
@@ -369,9 +229,9 @@ namespace Nayuki749.Speech_to_Text
         /// </summary>
         private void SessionStartedEventHandler(SessionEventArgs e, RecoType rt)
         {
-            SpeechSessionStartedEventArgs eventArgs = new SpeechSessionStartedEventArgs();
-            eventArgs.Message = "Speech recognition: Session started event: " + e.ToString() + ".";
-            OnSpeechSessionStartedEvent(eventArgs);
+           
+            Console.WriteLine("Speech recognition: Session started event: " + e.ToString() + ".");
+            
         }
 
         /// <summary>
@@ -380,23 +240,23 @@ namespace Nayuki749.Speech_to_Text
         private void SessionStoppedEventHandler(SessionEventArgs e, RecoType rt, TaskCompletionSource<int> source)
         {
             source.TrySetResult(0);
-            SpeechSessionStopedEventArgs eventArgs = new SpeechSessionStopedEventArgs();
-            eventArgs.Message = "Speech recognition: Session stopped event: " + e.ToString() + ".";
-            OnSpeechSessionStopedEvent(eventArgs);
+            //SpeechSessionStopedEventArgs eventArgs = new SpeechSessionStopedEventArgs();
+            Console.WriteLine("Speech recognition: Session stopped event: " + e.ToString() + ".");
+            //OnSpeechSessionStopedEvent(eventArgs);
         }
 
         private void DetectedEventHandler(RecognitionEventArgs e, RecoType rt, string eventType)
         {
-            SpeechDetectedEvendEventArgs eventArgs = new SpeechDetectedEvendEventArgs();
-            eventArgs.Message = "Speech recognition: Speech " + eventType + "detected event: " + e.ToString() + ".";
-            OnSpeechDetectedEvent(eventArgs);
+            //SpeechDetectedEvendEventArgs eventArgs = new SpeechDetectedEvendEventArgs();
+            Console.WriteLine("Speech recognition: Speech " + eventType + "detected event: " + e.ToString() + ".");
+            //OnSpeechDetectedEvent(eventArgs);
         }
 
         #endregion
 
-        static void Main()
+        static void Main(string[] args)
         {
-            Speech_To_Text p = new Speech_To_Text();
+            Program p = new Program();
             p.UseMicrophone = false;
             p.UseFileInput = true;
             p.UseBaseModel = true;
@@ -413,20 +273,11 @@ namespace Nayuki749.Speech_to_Text
             Console.ReadLine();
         }
 
-        public Speech_To_Text()
+        private static void test()
         {
-            UseMicrophone = false;
-            UseFileInput = true;
-            UseBaseModel = true;
-            UseCustomModel = false;
-            UseBaseAndCustomModels = false;
-            subscriptionKey = "none";
-            customModeEndpointId = "none";
-            MicrophoneID = "";
-            PROXY_HOST = "";
-            PROXY_Port = "";
+           
         }
-        
+
         private void OnPropertyChanged<T>([CallerMemberName]string caller = null)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(caller));
@@ -459,15 +310,15 @@ namespace Nayuki749.Speech_to_Text
             {
                 if (this.UseBaseModel)
                 {
-                    throw new subscriptionKeyException("Subscription Key is wrong or missing!");
+                    Console.WriteLine("Subscription Key is wrong or missing!");
                 }
                 else if (this.UseCustomModel)
                 {
-                    throw new subscriptionKeyException("Subscription Key or Custom Model Endpoint ID is missing or wrong! If you do not need the custom model");
+                    Console.WriteLine("Subscription Key or Custom Model Endpoint ID is missing or wrong! If you do not need the custom model");
                 }
                 else if (this.UseBaseAndCustomModels)
                 {
-                    throw new subscriptionKeyException("Subscription Key or Custom Model Endpoint ID is missing or wrong! If you do not need the custom model");
+                    Console.WriteLine("Subscription Key or Custom Model Endpoint ID is missing or wrong! If you do not need the custom model");
                 }
 
                 return;
@@ -507,15 +358,15 @@ namespace Nayuki749.Speech_to_Text
             {
                 if (this.UseBaseModel)
                 {
-                    throw new subscriptionKeyException("Subscription Key is wrong or missing!");
+                    Console.WriteLine("Subscription Key is wrong or missing!");
                 }
                 else if (this.UseCustomModel)
                 {
-                    throw new subscriptionKeyException("Subscription Key or Custom Model Endpoint ID is missing or wrong! If you do not need the custom model");
+                    Console.WriteLine("Subscription Key or Custom Model Endpoint ID is missing or wrong! If you do not need the custom model");
                 }
                 else if (this.UseBaseAndCustomModels)
                 {
-                    throw new subscriptionKeyException("Subscription Key or Custom Model Endpoint ID is missing or wrong! If you do not need the custom model");
+                    Console.WriteLine("Subscription Key or Custom Model Endpoint ID is missing or wrong! If you do not need the custom model");
                 }
 
                 return;
@@ -571,7 +422,6 @@ namespace Nayuki749.Speech_to_Text
         {
             try
             {
-                
                 // Todo: suport users to specifiy a different region.
                 var config = SpeechConfig.FromSubscription(this.SubscriptionKey, this.Region);
                 config.SpeechRecognitionLanguage = this.RecognitionLanguage;
@@ -613,7 +463,10 @@ namespace Nayuki749.Speech_to_Text
                     }
                 }
             }
-            catch(Exception e) {  }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
 
         /// <summary>
@@ -629,8 +482,8 @@ namespace Nayuki749.Speech_to_Text
             config.SpeechRecognitionLanguage = this.RecognitionLanguage;
             config.EndpointId = this.CustomModelEndpointId;
             //If proxy information has been entered, set the proxy
-            if ((this.proxy_Host != null && this.proxy_Host.Length > 0) &&
-                (this.proxy_Port != null && this.proxy_Port.Length > 0))
+            if ((this.proxy_Host != null || this.proxy_Host.Length >= 0) &&
+                (this.proxy_Port != null || this.proxy_Port.Length >= 0))
                 config.SetProxy(proxy_Host, int.Parse(proxy_Port));
 
             SpeechRecognizer customRecognizer;
@@ -729,9 +582,9 @@ namespace Nayuki749.Speech_to_Text
             string recoSource;
             recoSource = this.UseMicrophone ? "microphone" : "wav file";
 
-            RecognitionStartEventArgs eventArgs = new RecognitionStartEventArgs();
-            eventArgs.Message = "--- Start speech recognition using " + recoSource + " in " + defaultLocale + " language ----";
-            OnRecognitionStartEvent(eventArgs);
+            //RecognitionStartEventArgs eventArgs = new RecognitionStartEventArgs();
+            Console.WriteLine("--- Start speech recognition using " + recoSource + " in " + defaultLocale + " language ----");
+            //OnRecognitionStartEvent(eventArgs);
         }
 
         private void PlayAudioFile()
