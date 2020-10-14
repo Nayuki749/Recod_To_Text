@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recode_To_Text", "Recode_To
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Speech_To_Text", "Speech_To_Text\Speech_To_Text.csproj", "{26E14C03-BA84-4930-92BE-216FA25E3757}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Speech_To_Text_Test", "Speech_To_Text_Test\Speech_To_Text_Test.csproj", "{4BD3BFB7-05DA-4090-A899-0D0099234A93}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,14 @@ Global
 		{26E14C03-BA84-4930-92BE-216FA25E3757}.Release|Any CPU.Build.0 = Release|Any CPU
 		{26E14C03-BA84-4930-92BE-216FA25E3757}.Release|x64.ActiveCfg = Release|x64
 		{26E14C03-BA84-4930-92BE-216FA25E3757}.Release|x64.Build.0 = Release|x64
+		{4BD3BFB7-05DA-4090-A899-0D0099234A93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BD3BFB7-05DA-4090-A899-0D0099234A93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BD3BFB7-05DA-4090-A899-0D0099234A93}.Debug|x64.ActiveCfg = Debug|x64
+		{4BD3BFB7-05DA-4090-A899-0D0099234A93}.Debug|x64.Build.0 = Debug|x64
+		{4BD3BFB7-05DA-4090-A899-0D0099234A93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BD3BFB7-05DA-4090-A899-0D0099234A93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BD3BFB7-05DA-4090-A899-0D0099234A93}.Release|x64.ActiveCfg = Release|Any CPU
+		{4BD3BFB7-05DA-4090-A899-0D0099234A93}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
