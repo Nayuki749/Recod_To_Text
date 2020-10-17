@@ -40,29 +40,11 @@ namespace Recod_To_Text
 
             textBlock_Recod_To_Text_Ver.SetBinding(TextBlock.TextProperty, RTTVBinding);
             textBlock_Speech_To_Text_DLL_Ver.SetBinding(TextBlock.TextProperty, STTDVBinding);
-
-            //Bird bird = new Bird();
-            //bird.Name = "Penguin";
-
-            //Binding binding = new Binding("Name");
-            //binding.Source = bird;
-
-            //textBlock1.SetBinding(TextBlock.TextProperty, binding);
         }
 
         private void Button_OK_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
-
-
-        //public string StopButtonTitle
-        //{
-        //    get { return (string)GetValue(TitleProperty); }
-        //    set { SetValue(TitleProperty, value); }
-        //}
-
-        //public static readonly DependencyProperty TitleProperty =
-        //    DependencyProperty.Register("StopButtonTitle", typeof(string), typeof(StopButton), new FrameworkPropertyMetadata("StopButtonTitle", FrameworkPropertyMetadataOptions.AffectsRender));
     }
 }
