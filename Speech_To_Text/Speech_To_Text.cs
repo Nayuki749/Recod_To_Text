@@ -48,6 +48,21 @@ namespace Nayuki749.Speech_to_Text
         public bool IsrecognizingCheck { get; set; }
 
         /// <summary>
+        /// Play WAV File Sound
+        /// </summary>
+        public bool IsPlayWav { get; set; }
+
+        private string ver;
+        public string Version
+        {
+            get
+            {
+
+                return ver;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets Subscription Key
         /// </summary>
         public string SubscriptionKey
@@ -431,6 +446,7 @@ namespace Nayuki749.Speech_to_Text
             MicrophoneID = "";
             PROXY_HOST = "";
             PROXY_Port = "";
+            ver = System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).FileVersion;
         }
         
         private void OnPropertyChanged<T>([CallerMemberName]string caller = null)
@@ -451,7 +467,7 @@ namespace Nayuki749.Speech_to_Text
             return true;
         }
 
-#region 音声認識開始
+        #region 音声認識開始
         /// <summary>
         /// Checks if keys are valid
         /// Plays audio if input source is a valid audio file
@@ -483,7 +499,10 @@ namespace Nayuki749.Speech_to_Text
             {
                 wavFileName = GetFile(wavFileName);
                 if (wavFileName.Length <= 0) return;
-                Task.Run(() => this.PlayAudioFile());
+                if (IsPlayWav)
+                {
+                    Task.Run(() => this.PlayAudioFile());
+                }
             }
 
             if (this.UseCustomModel || this.UseBaseAndCustomModels)
@@ -531,7 +550,10 @@ namespace Nayuki749.Speech_to_Text
             {
                 wavFileName = GetFile(_fileName);
                 if (wavFileName.Length <= 0) return;
-                Task.Run(() => this.PlayAudioFile());
+                if (IsPlayWav)
+                {
+                    Task.Run(() => this.PlayAudioFile());
+                }
             }
 
             if (this.UseCustomModel || this.UseBaseAndCustomModels)
@@ -546,7 +568,7 @@ namespace Nayuki749.Speech_to_Text
                 Task.Run(async () => { await CreateBaseReco().ConfigureAwait(false); });
             }
         }
-#endregion
+        #endregion
 
         /// <summary>
         /// Stops Recognition and enables Settings Panel in UI

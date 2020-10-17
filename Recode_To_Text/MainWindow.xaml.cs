@@ -6,8 +6,9 @@ using SourceChord.Lighty;
 using System.IO;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Nayuki749.Speech_to_Text;
+using log4net;
 
-namespace Recode_to_text
+namespace Recod_To_Text
 {
     /// <summary>
     /// MainWindow.xaml の相互作用ロジック
@@ -17,16 +18,22 @@ namespace Recode_to_text
         internal Settings setting;
         private Speech_To_Text stt;
         internal string filepath;
+        private static readonly ILog logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public MainWindow()
         {
             InitializeComponent();
+            logger.Info("------------- Application Start -------------");
+#if DEBUG
+            logger.Debug("******************** Debug mode ********************");
+#endif
+            grid_progress.Visibility = Visibility.Hidden;
             setting = new Settings();
             stt = new Speech_To_Text();
+            logger.Info("loading configuration.");
             xml2setting();
             button_Start.IsEnabled = true;
             button_Stop.IsEnabled = false;
-            
 
             #region Spheech to Text Events
             stt.SpeechRecognizingEvent += new Speech_To_Text.SpeechRecognizingEventHandler(this.SpeechRecognizing);
@@ -77,7 +84,12 @@ namespace Recode_to_text
                 setting.PROXY_Host = asw.PROXY_Host;
                 setting.PROXY_Port = asw.PROXY_Port;
                 setting.Device = setting.Device;
-                setting2xml();
+                logger.Info("Save Azure settings.");
+                setting2xml();              
+            }
+            else
+            {
+                logger.Debug("------------- Cancel save Azure settings -------------");
             }
         }
 
@@ -94,6 +106,7 @@ namespace Recode_to_text
             {
                 mdsw.Device = setting.Device;
             }
+            logger.Debug("------------- Microphone device setting window show dialog -------------");
             LightBox.ShowDialog(this, mdsw);
             if (mdsw.DialogResult)
             {
@@ -104,6 +117,11 @@ namespace Recode_to_text
                 setting.PROXY_Port = setting.PROXY_Port;
                 setting.Device = mdsw.Device;
                 setting2xml();
+                logger.Info("Save Microphone Device settings.");
+            }
+            else
+            {
+                logger.Debug("------------- Cancel Save Microphone Device settings -------------");
             }
         }
 
@@ -114,13 +132,20 @@ namespace Recode_to_text
         {
             // XmlSerializerを使ってファイルに保存（TwitSettingオブジェクトの内容を書き込む）
             XmlSerializer serializer = new XmlSerializer(typeof(Settings));
+            try
+            {
+                // カレントディレクトリに"settings.xml"というファイルで書き出す
+                FileStream fs = new FileStream(Directory.GetCurrentDirectory() + @"\settings.xml", FileMode.Create);
 
-            // カレントディレクトリに"settings.xml"というファイルで書き出す
-            FileStream fs = new FileStream(Directory.GetCurrentDirectory() + @"\settings.xml", FileMode.Create);
-
-            // オブジェクトをシリアル化してXMLファイルに書き込む
-            serializer.Serialize(fs, setting);
-            fs.Close();
+                // オブジェクトをシリアル化してXMLファイルに書き込む
+                serializer.Serialize(fs, setting);
+                fs.Close();
+                logger.Info("Completed save the setting file.");
+            }
+            catch(Exception e)
+            {
+                logger.Error(e.Message + e.Source + e.StackTrace);
+            }
         }
 
         /// <summary>
@@ -130,16 +155,27 @@ namespace Recode_to_text
         {
             if (File.Exists(Directory.GetCurrentDirectory() + @"\settings.xml"))
             {
-                // XmlSerializerを使ってファイルに保存（TwitSettingオブジェクトの内容を書き込む）
-                XmlSerializer serializer = new XmlSerializer(typeof(Settings));
+                try
+                {
+                    // XmlSerializerを使ってファイルに保存（TwitSettingオブジェクトの内容を書き込む）
+                    XmlSerializer serializer = new XmlSerializer(typeof(Settings));
 
-                FileStream fs = new FileStream(Directory.GetCurrentDirectory() + @"\settings.xml", FileMode.Open);
+                    FileStream fs = new FileStream(Directory.GetCurrentDirectory() + @"\settings.xml", FileMode.Open);
 
-                // XMLファイルを読み込み、逆シリアル化（復元）する
-                setting = (Settings)serializer.Deserialize(fs);
-                fs.Close();
-
-           }
+                    // XMLファイルを読み込み、逆シリアル化（復元）する
+                    setting = (Settings)serializer.Deserialize(fs);
+                    fs.Close();
+                    logger.Info("Completed loading the setting file.");
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e.Message + e.Source + e.StackTrace);
+                }
+            }
+            else
+            {
+                logger.Info("Dose not exsist setting file.");
+            }
         }
 
         /// <summary>
@@ -168,6 +204,7 @@ namespace Recode_to_text
             stt.UseBaseModel = true;
             stt.UseBaseAndCustomModels = false;
             stt.UseCustomModel = false;
+            stt.IsPlayWav = toggleSwitch_play.IsOn;
             stt.IsrecognizingCheck = false;
 #if DEBUG
             stt.IsrecognizingCheck = true;
@@ -176,12 +213,18 @@ namespace Recode_to_text
 
             try
             {
+                logger.Info("Start voice recognition processing with microphone.");
                 //音声認識開始
                 stt.Start();
+                logger.Debug("------------- Start ProgressRing -------------");
+                grid_progress.Visibility = Visibility.Visible;
             }
             catch(Exception exception)
             {
+                logger.Error(exception.Message);
                 MessageBox.Show(exception.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                grid_progress.Visibility = Visibility.Hidden;
+                logger.Debug("------------- Stop ProgressRing -------------");
             }
         }
 
@@ -197,6 +240,7 @@ namespace Recode_to_text
 
             try
             {
+                logger.Info("Stop voice recognition processing with microphone.");
                 stt.Stop();
             }
             catch { }
@@ -222,13 +266,13 @@ namespace Recode_to_text
                 {
                     return;
                 }
-
+                logger.Info("The file for voice recognition has been opened.");
+                logger.Info("Open File Name:" + cofd.FileName);
                 filepath = cofd.FileName;
 
                 // フォルダを取得する
                 //System.Windows.MessageBox.Show($"{cofd.FileName}を選択しました");
             }
-
         }
 
         /// <summary>
@@ -238,7 +282,6 @@ namespace Recode_to_text
         /// <param name="e"></param>
         private void Button_ProcessStart_Click(object sender, RoutedEventArgs e)
         {
-
             #region 音声認識機能プロパティ設定
             stt.SubscriptionKey = setting.SubscriptionKey;
             stt.Region = setting.Region;
@@ -251,17 +294,38 @@ namespace Recode_to_text
             stt.UseBaseModel = true;
             stt.UseBaseAndCustomModels = false;
             stt.UseCustomModel = false;
+            stt.IsPlayWav = toggleSwitch_play.IsOn;
             stt.IsrecognizingCheck = false;
-
 #if DEBUG
             stt.IsrecognizingCheck = true;
 #endif
             #endregion
 
-            stt.Start(filepath);
+            try
+            {
+                logger.Info("Starts voice recognition processing using WAV files.");
+                stt.Start(filepath);
+                logger.Debug("------------- Start ProgressRing -------------");
+                grid_progress.Visibility = Visibility.Visible;
+            }
+            catch (Exception exception)
+            {
+                logger.Error(exception.Message);
+                MessageBox.Show(exception.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                logger.Debug("------------- Stop ProgressRing -------------");
+                grid_progress.Visibility = Visibility.Hidden;
+            }
         }
 
-#region 音声認識イベント
+        private void Button_versionInformation_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.FileVersionInfo ver = System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            VersionInfomationWindow VersionWindow = new VersionInfomationWindow("Recode_To_Text_Ver:" + ver.FileVersion, "Speech_To_Text_DLL_Ver:" + stt.Version);
+            logger.Debug("------------- VersionWindow show dialog -------------");
+            LightBox.ShowDialog(this, VersionWindow);
+        }
+
+        #region 音声認識イベント
 
         /// <summary>
         /// ストップイベント
@@ -270,11 +334,19 @@ namespace Recode_to_text
         /// <param name="e"></param>
         private  void SpeechSessionStoped(object sender, SpeechSessionStopedEventArgs e)
         {
-            using (var write = new StreamWriter(filepath + ".txt", true))
+            using (var write = new StreamWriter(filepath + ".txt", true, System.Text.Encoding.GetEncoding("shift_jis")))
             {
-               write.WriteLine(e.Message);
+                logger.Info("Azure session stop");
+                logger.Debug("SpeechSessionStoped Event:" + e.Message);
+                write.WriteLine(e.Message);
             }
+            logger.Debug("------------- Stop ProgressRing -------------");
+            Dispatcher.Invoke(new Action(() =>
+            {
+                grid_progress.Visibility = Visibility.Hidden;
+            }));
         }
+
         /// <summary>
         /// スタートイベント
         /// </summary>
@@ -282,8 +354,10 @@ namespace Recode_to_text
         /// <param name="e"></param>
         private void SpeechSessionStarted(object sender, SpeechSessionStartedEventArgs e)
         {
-            using (var write = new StreamWriter(filepath + ".txt", true))
+            using (var write = new StreamWriter(filepath + ".txt", true, System.Text.Encoding.GetEncoding("shift_jis")))
             {
+                logger.Info("Azure session start");
+                logger.Debug("SpeechSessionStarted Event:" + e.Message);
                 write.WriteLine(e.Message);
             }
         }
@@ -295,8 +369,9 @@ namespace Recode_to_text
         /// <param name="e"></param>
         private void SpechCanceled(object sender, SpeechCanceledEventArgs e)
         {
-            using (var write = new StreamWriter(filepath + ".txt", true))
+            using (var write = new StreamWriter(filepath + ".txt", true, System.Text.Encoding.GetEncoding("shift_jis")))
             {
+                logger.Debug("SpechCanceled Event:" + e.Message);
                 write.WriteLine(e.Message);
             }
         }
@@ -308,8 +383,10 @@ namespace Recode_to_text
         /// <param name="e"></param>
         private void SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
-            using (var write = new StreamWriter(filepath + ".txt", true))
+            using (var write = new StreamWriter(filepath + ".txt", true, System.Text.Encoding.GetEncoding("shift_jis")))
             {
+                logger.Info("Azure recognitioned Response");
+                logger.Debug("SpeechRecognized Event:" + e.Message);
                 write.WriteLine(e.Message);
             }
         }
@@ -321,8 +398,9 @@ namespace Recode_to_text
         /// <param name="e"></param>
         private void SpeechRecognizing(object sender, SpeechRecognizingEventArgs e)
         {
-            using (var write = new StreamWriter(filepath + ".txt", true))
+            using (var write = new StreamWriter(filepath + ".txt", true, System.Text.Encoding.GetEncoding("shift_jis")))
             {
+                logger.Debug("SpeechRecognizing Event:" + e.Message);
                 write.WriteLine(e.Message);
             }
         }
@@ -334,8 +412,10 @@ namespace Recode_to_text
         /// <param name="e"></param>
         private void RecognitionStart(object sender, RecognitionStartEventArgs e)
         {
-            using (var write = new StreamWriter(filepath + ".txt", true))
+            using (var write = new StreamWriter(filepath + ".txt", true, System.Text.Encoding.GetEncoding("shift_jis")))
             {
+                logger.Info("Start Azure recognition process");
+                logger.Debug("RecognitionStart Event:" + e.Message);
                 write.WriteLine(e.Message);
             }
         }
@@ -347,12 +427,17 @@ namespace Recode_to_text
         /// <param name="e"></param>
         private void SpeechDetected(object sender, SpeechDetectedEvendEventArgs e)
         {
-            using (var write = new StreamWriter(filepath + ".txt", true))
-            {
+            using (var write = new StreamWriter(filepath + ".txt", true, System.Text.Encoding.GetEncoding("shift_jis")))
+            {                
+                logger.Debug("SpeechDetected Event:" + e.Message);
                 write.WriteLine(e.Message);
             }
         }
-#endregion
+        #endregion
 
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            logger.Info("------------- Application Stop -------------");
+        }
     }
 }

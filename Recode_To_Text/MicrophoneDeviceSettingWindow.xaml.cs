@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using NAudio.CoreAudioApi;
 using SourceChord.Lighty;
 
-namespace Recode_to_text
+namespace Recod_To_Text
 {
     /// <summary>
     /// MicrophoneDeviceSetingWindow.xaml の相互作用ロジック

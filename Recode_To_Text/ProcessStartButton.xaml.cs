@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace Recode_to_text
+namespace Recod_To_Text
 {
     public partial class ProcessStartButton : Button
     {

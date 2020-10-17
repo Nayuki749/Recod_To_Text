@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SourceChord.Lighty;
 
-namespace Recode_to_text
+namespace Recod_To_Text
 {
     /// <summary>
     /// test.xaml の相互作用ロジック

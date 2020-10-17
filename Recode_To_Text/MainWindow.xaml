@@ -1,16 +1,18 @@
-﻿<Window x:Class="Recode_to_text.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Recode_to_text"
+        xmlns:local="clr-namespace:Recod_To_Text"
+        xmlns:lighty="clr-namespace:SourceChord.Lighty;assembly=Lighty"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:Recode_To_text="clr-namespace:Recod_To_Text" x:Class="Recod_To_Text.MainWindow"
         mc:Ignorable="d"
         Title="Recode to Text" Height="450" Width="310"
-        xmlns:lighty="clr-namespace:SourceChord.Lighty;assembly=Lighty"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize" Closing="Window_Closing">
     <Window.Resources>
         <!--メニュー表示情報-->
-        <ControlTemplate x:Key="BottomMenuList0" TargetType="ListBox">
+        <ControlTemplate x:Key="BottomMenuList0" TargetType="{x:Type ListBox}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -23,27 +25,17 @@
                     <RowDefinition Height="12"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Border Grid.Row="1" Grid.Column="0" BorderThickness="5" Opacity="0.0">
-                    <Border.BorderBrush>
-                        <SolidColorBrush Color="#E5206135"/>
-                    </Border.BorderBrush>
-                </Border>
+                <Border Grid.Row="1" Grid.Column="0" BorderThickness="5" Opacity="0.0" BorderBrush="#E5206135"/>
                 <!--<Border Grid.RowSpan="2" Grid.Column="0" BorderThickness="5" CornerRadius="15">-->
-                <Border Grid.RowSpan="2" Grid.Column="0" BorderThickness="5" Opacity="0.9">
-                    <Border.BorderBrush>
-                        <SolidColorBrush Color="#E5206135"/>
-                    </Border.BorderBrush>
+                <Border Grid.RowSpan="2" Grid.Column="0" BorderThickness="5" Opacity="0.9" BorderBrush="#E5206135">
                     <Grid>
-                        <TextBlock Name="menuText" Foreground="White" Background="#E5206135">Menu</TextBlock>
+                        <TextBlock x:Name="menuText" Foreground="White" Background="#E5206135"><Run Text="Menu"/></TextBlock>
                     </Grid>
                 </Border>
                 <!--<Border Grid.Row="2" Grid.ColumnSpan="4" Opacity="0.7">-->
-                <Border Grid.Row="2" Grid.ColumnSpan="4" Opacity="0.9">
-                    <Border.BorderBrush>
-                        <SolidColorBrush Color="#E5206135"/>
-                    </Border.BorderBrush>
+                <Border Grid.Row="2" Grid.ColumnSpan="4" Opacity="0.9" BorderBrush="#E5206135">
                     <Grid>
-                        <ItemsPresenter ></ItemsPresenter>
+                        <ItemsPresenter />
                     </Grid>
                 </Border>
             </Grid>
@@ -51,15 +43,14 @@
         <ItemsPanelTemplate x:Key="AutoHideMenuItemsPanel">
 
             <!--<StackPanel Orientation="Horizontal"/>-->
-            <StackPanel Orientation="Vertical"  Background="#E5206135">
-            </StackPanel>
+            <StackPanel Orientation="Vertical"  Background="#E5206135"/>
 
         </ItemsPanelTemplate>
         <!--リストのイベント-->
-        <Style x:Key="AutoShowHideStyle" TargetType="ListBox">
+        <Style x:Key="AutoShowHideStyle" TargetType="{x:Type ListBox}">
             <Style.Triggers>
                 <!--マウスダウンイベントでメニューオープン-->
-                <EventTrigger RoutedEvent="MouseDown">
+                <EventTrigger RoutedEvent="UIElement.MouseDown">
                     <BeginStoryboard>
                         <Storyboard>
                             <!--<DoubleAnimation To="80" Duration="0:0:0.25" Storyboard.TargetProperty="Height"/>-->
@@ -68,7 +59,7 @@
                     </BeginStoryboard>
                 </EventTrigger>
                 <!--メニューからマウスが離れたらメニューを閉じる-->
-                <EventTrigger RoutedEvent="MouseLeave">
+                <EventTrigger RoutedEvent="UIElement.MouseLeave">
                     <BeginStoryboard>
                         <Storyboard>
                             <DoubleAnimation To="24" Duration="0:0:0.15" Storyboard.TargetProperty="Height"/>
@@ -80,23 +71,37 @@
 
         <Style TargetType="{x:Type lighty:LightBox}">
             <Setter Property="Template" Value="{StaticResource DarkGlassTemplate}" />
-            <Setter Property="ItemsPanel" Value="{StaticResource HorizontalPanel}" />
+            <!--<Setter Property="ItemsPanel" Value="{StaticResource VerticalPanel}" />-->
             <!--<Setter Property="ItemContainerStyle" Value="{StaticResource ClosableContainerStyle}" />-->
         </Style>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
+        <Style x:Key="pgr-normal" TargetType="{x:Type Controls:ProgressRing}" >
+            <Setter Property="Foreground" Value="#33adff" />
+            <Setter Property="IsActive" Value="False" />
+            <Setter Property="Width" Value="10" />
+            <Setter Property="Height" Value="10" />
+            <Setter Property="Panel.ZIndex" Value="10" />
+        </Style>
+
     </Window.Resources>
 
     <Grid>
-        <Grid HorizontalAlignment="Left" Height="280" Margin="0,46,0,0" VerticalAlignment="Top" Width="304">
+        <Grid HorizontalAlignment="Left" Height="375" Margin="0,46,0,0" VerticalAlignment="Top" Width="304">
             <Grid.RowDefinitions>
                 <RowDefinition Height="45"/>
                 <RowDefinition Height="45"/>
                 <RowDefinition Height="100"/>
+                <RowDefinition Height="25"/>
                 <RowDefinition Height="45"/>
                 <RowDefinition Height="45"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
             <!--<local:RecodingButton Grid.Column="0" HorizontalAlignment="Right" Margin="3" Title="Watch Now" SubTitle="Duration: 50 min">-->
             <local:RecodingButton x:Name="button_Start"  Grid.Row="0" HorizontalAlignment="Center" Margin="10,3,21,3" Title="Speech Start" Width="273" Click="RecodingButton_Click" AutomationProperties.Name="button_Start" >
                 <local:RecodingButton.Image>
+                    <!--<local:RecodingButton.Image>-->
                     <Path Data="M0,0 A10,10 0 0 0 10,30 A10,10 0 0 0 0,0" Stretch="Fill" Width="22.26" Height="21.436">
                         <Path.Effect>
                             <DropShadowEffect Direction="50" ShadowDepth="2" />
@@ -125,7 +130,7 @@
                     </Path>
                 </local:StopButton.StopButtonImage>
             </local:StopButton>
-            <local:FileOpenButton Grid.Row="3" HorizontalAlignment="Center" Margin="10,3,21,3" FileOpenButtonTitle="File Open" Width="273" Click="FileOpenButton_Click" AutomationProperties.Name="button_FileOpen" x:Name="button_FileOpen">
+            <local:FileOpenButton Grid.Row="4" HorizontalAlignment="Center" Margin="10,3,21,3" FileOpenButtonTitle="File Open" Width="273" Click="FileOpenButton_Click" AutomationProperties.Name="button_FileOpen" x:Name="button_FileOpen">
                 <local:FileOpenButton.FileOpenButtonImage>
                     <Rectangle Height="26" Width="26">
                         <Rectangle.Fill>
@@ -134,7 +139,7 @@
                     </Rectangle>
                 </local:FileOpenButton.FileOpenButtonImage>
             </local:FileOpenButton>
-            <local:ProcessStartButton Grid.Row="4" HorizontalAlignment="Center" Margin="10,3,21,3" ProcessStartButtonTitle="Process Start" Width="273"  AutomationProperties.Name="button_ProcessStart" x:Name="button_ProcessStart" Click="Button_ProcessStart_Click">
+            <local:ProcessStartButton Grid.Row="5" HorizontalAlignment="Center" Margin="10,3,21,3" ProcessStartButtonTitle="Process Start" Width="273"  AutomationProperties.Name="button_ProcessStart" x:Name="button_ProcessStart" Click="Button_ProcessStart_Click">
                 <local:ProcessStartButton.ProcessStartButtonImage>
                     <Path Data="M 0,0 L 0,30 L 30,30 L 30,0 Z" Height="20" Stretch="Fill" Width="18">
                         <Path.Effect>
@@ -149,18 +154,27 @@
                     </Path>
                 </local:ProcessStartButton.ProcessStartButtonImage>
             </local:ProcessStartButton>
+            <Label x:Name="label_playSelect" Content="音声認識時再生" HorizontalAlignment="Left" Margin="0,97,0,0" Grid.Row="2" VerticalAlignment="Top" Grid.RowSpan="2"/>
+            <Recode_To_text:ToggleSwitch x:Name="toggleSwitch_play" HorizontalAlignment="Left" Margin="95,4,0,0" Grid.Row="3" VerticalAlignment="Top" RenderTransformOrigin="0.485,0.263" Height="15" Width="30" TrackBackgroundOnColor="#FF00FF17" TrackBackgroundOffColor="#FFF0EBEB" Duration="0.1"/>
+            <Grid x:Name="grid_progress" HorizontalAlignment="Left" Height="43" Margin="0,2,0,0" Grid.Row="6" VerticalAlignment="Top" Width="304" d:IsHidden="True" Visibility="{Binding IsInitializing, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <!--<Grid x:Name="grid_progress" HorizontalAlignment="Left" Height="43" Margin="0,2,0,0" Grid.Row="6" VerticalAlignment="Top" Width="304" >-->
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+                <Controls:ProgressRing Grid.Column="0" IsActive="True" Style="{StaticResource pgr-normal}"/>
+                <Label x:Name="label_progress" Content="音声認識処理中です..." Grid.Column="1" Margin="10,9,-87,-9" FontSize="14"/>
+            </Grid>
         </Grid>
-        <ListBox Name="menuList" Height ="24"  VerticalAlignment="Top"
+        <ListBox x:Name="menuList" Height ="24"  VerticalAlignment="Top"
              Template="{StaticResource BottomMenuList0}"
              ItemsPanel="{StaticResource AutoHideMenuItemsPanel}"
              Style="{StaticResource AutoShowHideStyle}" Margin="0,0,110,0">
-            <Button Name="button_azureSetting" Background="#FF206135" Width="200" Foreground="White" BorderBrush="#FF206135" HorizontalContentAlignment="Left" Click="Button_azureSetting_Click">Azure設定</Button>
-            <Button Name="button_deviceSetting" Background="#FF206135" Width="200" Foreground="White" BorderBrush="#FF206135" HorizontalContentAlignment="Left" Click="Button_deviceSetting_Click">Device設定</Button>
-            <!--<Button Background="#FF206135" Width="200" Foreground="White" BorderBrush="#FF206135" HorizontalContentAlignment="Left">ccc</Button>-->
+            <Button x:Name="button_azureSetting" Background="#FF206135" Width="200" Foreground="White" BorderBrush="#FF206135" HorizontalContentAlignment="Left" Click="Button_azureSetting_Click" Content="Azure設定"/>
+            <Button x:Name="button_deviceSetting" Background="#FF206135" Width="200" Foreground="White" BorderBrush="#FF206135" HorizontalContentAlignment="Left" Click="Button_deviceSetting_Click" Content="Device設定"/>
+            <Button Background="#FF206135" Width="200" Foreground="White" BorderBrush="#FF206135" HorizontalContentAlignment="Left" Click="Button_versionInformation_Click">Version情報</Button>
             <!--<Button Background="#FF206135" Width="200" Foreground="White" BorderBrush="#FF206135" HorizontalContentAlignment="Left">ddd</Button>-->
             <!--<Button Background="#FF206135" Width="200" Foreground="White" BorderBrush="#FF206135" HorizontalContentAlignment="Left">eee</Button>-->
         </ListBox>
-
     </Grid>
-
 </Window>

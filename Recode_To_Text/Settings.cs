@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Recode_to_text
+namespace Recod_To_Text
 {
     public class Settings
     {
