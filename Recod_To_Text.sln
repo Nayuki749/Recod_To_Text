@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.1231
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recod_To_Text", "Recode_To_Text\Recod_To_Text.csproj", "{73C08788-C041-45E7-9B66-98E9DDF71AFC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recod_To_Text", "Recod_To_Text\Recod_To_Text.csproj", "{73C08788-C041-45E7-9B66-98E9DDF71AFC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Speech_To_Text", "Speech_To_Text\Speech_To_Text.csproj", "{26E14C03-BA84-4930-92BE-216FA25E3757}"
 EndProject
