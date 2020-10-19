@@ -266,10 +266,17 @@ namespace Recod_To_Text
                 {
                     return;
                 }
-                logger.Info("The file for voice recognition has been opened.");
-                logger.Info("Open File Name:" + cofd.FileName);
-                filepath = cofd.FileName;
-
+                if (System.IO.Path.GetExtension(cofd.FileName) == ".wav"|| System.IO.Path.GetExtension(cofd.FileName) == ".WAV") {
+                    logger.Info("The file for voice recognition has been opened.");
+                    logger.Info("Open File Name:" + cofd.FileName);
+                    filepath = cofd.FileName;
+                }
+                else
+                {
+                    logger.Error("File with extension:*" + System.IO.Path.GetExtension(cofd.FileName) + " selected.");
+                    logger.Error("Please specify a wav file.");
+                    MessageBox.Show("File with extension:*" + System.IO.Path.GetExtension(cofd.FileName) + " selected.\nPlease specify a wav file.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
                 // フォルダを取得する
                 //System.Windows.MessageBox.Show($"{cofd.FileName}を選択しました");
             }
